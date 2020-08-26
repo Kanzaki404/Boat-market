@@ -129,6 +129,25 @@ const Select = styled.select`
   outline: none;
 `;
 
+const InputField4 = styled.div`
+
+  height: 50px;
+  width: 100%;
+  
+  box-sizing: border-box;
+`;
+const SerachButton = styled.button`
+  height: 35px;
+    width: 90px;
+    border: none;
+    background: #28a745;
+    border-radius: 3px;
+    color: white;
+    font-size: 15px;
+    font-weight: 400;
+    float: left;
+    margin-top: 7px;
+`;
 export default function Filter() {
   return (
     <FilterWrapper>
@@ -137,24 +156,24 @@ export default function Filter() {
       </InputField>
       <InputField2>
         <MaxPrice>
-          <MaxPriceLabel for="maxPrice"> Max Price: </MaxPriceLabel>
+          <MaxPriceLabel htmlFor="maxPrice"> Max Price: </MaxPriceLabel>
           <MaxPriceInput id="maxPrice" placeholder="Max Price"></MaxPriceInput>
         </MaxPrice>
         <Type>
-          <TypeLabel for="motorType">Motorised:</TypeLabel>
+          <TypeLabel htmlFor="motorType">Motorised:</TypeLabel>
           <TypeInput id="motorType" type="checkbox"></TypeInput>
-          <TypeLabel for="sailType">Sail:</TypeLabel>
+          <TypeLabel htmlFor="sailType">Sail:</TypeLabel>
           <TypeInput id="sailType" type="checkbox"></TypeInput>
         </Type>
       </InputField2>
       <InputField3>
         <ManifacturedYear>
           <div>
-            <input type="radio" id="madeBefore" name="choice"></input>
-            <label for="madeBefore">Made Before</label>
+            <input type="radio" id="madeBehtmlFore" name="choice"></input>
+            <label htmlFor="madeBehtmlFore">Made Before</label>
             <br />
             <input type="radio" id="madeAfter" name="choice"></input>
-            <label for="madeAfter">Made After</label>
+            <label htmlFor="madeAfter">Made After</label>
           </div>
 
           <ManifacturedYearInput
@@ -163,7 +182,7 @@ export default function Filter() {
           ></ManifacturedYearInput>
         </ManifacturedYear>
         <OrderBy>
-			<label for="orderby">Order by:</label>
+			<label htmlFor="orderby">Order by:</label>
 			<Select name="cars" id="orderby">
 				<option value="lowToHigh">Low - High (price)</option>
 				<option value="highToLow">High - Low (price)</option>
@@ -175,7 +194,9 @@ export default function Filter() {
   
 		</OrderBy>
       </InputField3>
-      <InputField3></InputField3>
+      <InputField4>
+	  		<SerachButton>Serach</SerachButton>
+	  </InputField4>
     </FilterWrapper>
   );
 }
