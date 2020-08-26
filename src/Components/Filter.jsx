@@ -147,6 +147,7 @@ const SerachButton = styled.button`
     font-weight: 400;
     float: left;
     margin-top: 7px;
+	outline: none;
 `;
 export default function Filter() {
   return (
