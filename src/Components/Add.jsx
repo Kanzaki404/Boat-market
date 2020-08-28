@@ -93,19 +93,7 @@ const FilterWrapper = styled.div`
     }
   }
 `;
-const UploadButton = styled.button`
-  	height: 35px;
-    width: 90px;
-    border: none;
-    background: #28a745;
-    border-radius: 3px;
-    color: white;
-    font-size: 15px;
-    font-weight: 400;
-    float: left;
-    margin-top: 7px;
-	outline: none;
-`;
+
 const InputFieldStyle = styled.input`
   margin-top: 3px;
   height: 41px;

@@ -69,7 +69,7 @@ function App() {
     <Bar>
       <div className="image" onClick={() => setCurrentPage("front")}></div>
       <h2 onClick={() => setCurrentPage("front")}>BerrMarket $</h2>
-      <div><button onClick={() => setCurrentPage("add")}>Add Ship</button>
+      <div><button onClick={() => setCurrentPage("add")}>More...</button>
       </div>
       </Bar>
     <Reflection></Reflection>

@@ -78,6 +78,7 @@ export default function Delete() {
       <h2>Remove ship</h2>
       <Content>
         <table>
+        <tbody>
           <tr>
             <th>Name</th>
             <th>Price</th>
@@ -92,7 +93,7 @@ export default function Delete() {
             <td>1936</td>
             <td><DelButton>Delete</DelButton></td>
           </TableRow>
-          
+          </tbody>
         </table>
       </Content>
     </DeleteWrapper>
