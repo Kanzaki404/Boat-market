@@ -9,6 +9,19 @@ const ContentWrapper = styled.div`
   padding-top: 20px;
   overflow-y: scroll;
   overflow-x: hidden;
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(160 160 160);;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    /* background: #888;  */
+    background: #3c3c3c;
+  }
 `;
 
 const Card = styled.div`

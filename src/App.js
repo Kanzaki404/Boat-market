@@ -1,9 +1,11 @@
-import React from "react";
 import Filter from './Components/Filter'
 import Content from './Components/Content'
+import AddComponent from './Components/Add'
+import DeleteComponent from './Components/Delete'
 import styled from "styled-components";
 import icon from "./assets/Vector.png"
 import icon2 from "./assets/VectorB.png"
+import React, { useState } from "react";
 const Main = styled.div`
   text-align: center;
 `
@@ -43,7 +45,8 @@ const Bar = styled.div`
     margin-top: 8px;
     text-decoration-line: underline;
   text-decoration-style: wavy;
-  margin-right: 25px;
+    margin-right: 25px;
+    cursor:pointer;
   }
 
   
@@ -57,17 +60,34 @@ const Reflection = styled.div`
     width: 180px;
     transform: rotateX(-180deg);   
 `
+
+
 function App() {
+  const [currentPage, setCurrentPage] = useState("c") 
+
   return <Main>
     <Bar>
-      <div className="image"></div>
-      <h2>BerrMarket $</h2>
-      <div><button>Add Ship</button>
+      <div className="image" onClick={() => setCurrentPage("front")}></div>
+      <h2 onClick={() => setCurrentPage("front")}>BerrMarket $</h2>
+      <div><button onClick={() => setCurrentPage("add")}>Add Ship</button>
       </div>
       </Bar>
     <Reflection></Reflection>
-	  <Filter></Filter>
+    {currentPage==='front' ? 
+    <div>
+    <Filter></Filter>
     <Content></Content>
+    </div>
+    :
+    <div>
+    <AddComponent></AddComponent>
+    <DeleteComponent></DeleteComponent>
+    </div>
+
+    
+  } 
+    
+	  
   </Main>;
 }
 

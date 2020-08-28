@@ -130,14 +130,12 @@ const Select = styled.select`
 `;
 
 const InputField4 = styled.div`
-
   height: 50px;
   width: 100%;
-  
   box-sizing: border-box;
 `;
 const SerachButton = styled.button`
-  height: 35px;
+  	height: 35px;
     width: 90px;
     border: none;
     background: #28a745;
