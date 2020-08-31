@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
+
+
 const DeleteWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -72,27 +75,51 @@ const DelButton = styled.button`
 const TableRow = styled.tr`
 
 `
+
+const baseUrl = "http://localhost:5000/";
+
+
+function GetAllBoats(setBoats, baseUrl) {
+  axios.get(`${baseUrl}boats`)
+  .then((res) =>{  
+   setBoats(res.data)
+  })
+  .catch((err) => console.log('ERROR ---> ' + err));
+}
+
 export default function Delete() {
+  const [boats, setBoats] = useState([]);
+  
+
+  useEffect(() => {
+  GetAllBoats(setBoats, baseUrl);
+  
+  // eslint-disable-next-line
+}, []);
+
+
+const BoatsList = boats.map((e) => (
+
+  <TableRow key={e.name}> 
+    <td>{e.name}</td>
+    <td>{e.price} SEK</td>
+    
+    {e.Sail !== 'yes' ? 
+      <td>Type: Motorized</td>
+      :
+      <td>Type: Sail</td>
+    }
+    <td>{e.manifactured_year}</td>
+    <td><DelButton>Delete</DelButton></td>
+  </TableRow>
+));
   return (
     <DeleteWrapper>
       <h2>Remove ship</h2>
       <Content>
         <table>
         <tbody>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>Manifactured Year</th>
-            <th>Action</th>
-          </tr>
-          <TableRow>
-            <td>Bismark</td>
-            <td>200 000 SEK</td>
-            <td>Motorized</td>
-            <td>1936</td>
-            <td><DelButton>Delete</DelButton></td>
-          </TableRow>
+          {BoatsList}
           </tbody>
         </table>
       </Content>

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import testImg from "../assets/tugboat.jpg";
+import axios from "axios";
+
 const ContentWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   width: 800px;
@@ -14,7 +16,7 @@ const ContentWrapper = styled.div`
   }
   /* Track */
   ::-webkit-scrollbar-track {
-    background: rgb(160 160 160);;
+    background: rgb(160 160 160);
   }
 
   /* Handle */
@@ -33,10 +35,10 @@ const Card = styled.div`
   display: inline-flex;
 `;
 const One = styled.div`
-    height: 100%;
-    
-    width: 35%;
-    box-sizing: border-box;
+  height: 100%;
+
+  width: 35%;
+  box-sizing: border-box;
   .img1 {
     background-image: url(${testImg});
     justify-self: center;
@@ -50,96 +52,64 @@ const One = styled.div`
 
 const Two = styled.div`
   height: 100%;
-  
+
   width: 65%;
   text-align: right;
 
   box-sizing: border-box;
-  .info{
-      margin-right: 10px;
-      h4{
-          color: #636363;
-      }
+  .info {
+    margin-right: 10px;
+    h4 {
+      color: #636363;
+    }
   }
 `;
+const baseUrl = "http://localhost:5000/";
+
+
+function GetAllBoats(setBoats, baseUrl) {
+  axios.get(`${baseUrl}boats`)
+  .then((res) =>{  
+   setBoats(res.data)
+  })
+  .catch((err) => console.log('ERROR ---> ' + err));
+}
+
 export default function Content() {
+  const [boats, setBoats] = useState([]);
+  
+
+  useEffect(() => {
+  GetAllBoats(setBoats, baseUrl);
+  
+  // eslint-disable-next-line
+}, []);
+
+console.log(Array.isArray(boats))
+const BoatsList = boats.map((e) => (
+
+   <Card key={e.name}> 
+        <One>
+          <div className="img1"></div>
+        </One>
+        <Two>
+          <div className="info">
+            <h2>{e.name}</h2>
+            <h2>{e.price} SEK</h2>
+            {e.Sail !== 'yes' ? 
+             <h4>Type: Motorized</h4>
+            :
+            <h4>Type: Sail</h4>
+          }
+           
+            <h4>Manifactured: July 1, {e.manifactured_year}</h4>
+          </div>
+        </Two>
+      </Card>
+));
   return (
     <ContentWrapper>
-      <Card>
-        <One>
-          <div className="img1"></div>
-        </One>
-        <Two>
-            <div className="info">
-            <h2>Bismark</h2>
-            <h2>200 000 SEK</h2>
-            <h4>Type: Motorized</h4>
-            <h4>Manifactured: July 1, 1936</h4>
-            
-            </div>
-            
-        </Two>
-      </Card>
-      <Card>
-        <One>
-          <div className="img1"></div>
-        </One>
-        <Two>
-            <div className="info">
-            <h2>Bismark</h2>
-            <h2>200 000 SEK</h2>
-            <h4>Type: Motorized</h4>
-            <h4>Manifactured: July 1, 1936</h4>
-            
-            </div>
-            
-        </Two>
-      </Card>
-      <Card>
-        <One>
-          <div className="img1"></div>
-        </One>
-        <Two>
-            <div className="info">
-            <h2>Bismark</h2>
-            <h2>200 000 SEK</h2>
-            <h4>Type: Motorized</h4>
-            <h4>Manifactured: July 1, 1936</h4>
-            
-            </div>
-            
-        </Two>
-      </Card>
-      <Card>
-        <One>
-          <div className="img1"></div>
-        </One>
-        <Two>
-            <div className="info">
-            <h2>Bismark</h2>
-            <h2>200 000 SEK</h2>
-            <h4>Type: Motorized</h4>
-            <h4>Manifactured: July 1, 1936</h4>
-            
-            </div>
-            
-        </Two>
-      </Card>
-      <Card>
-        <One>
-          <div className="img1"></div>
-        </One>
-        <Two>
-            <div className="info">
-            <h2>Bismark</h2>
-            <h2>200 000 SEK</h2>
-            <h4>Type: Motorized</h4>
-            <h4>Manifactured: July 1, 1936</h4>
-            
-            </div>
-            
-        </Two>
-      </Card>
+      {BoatsList}
     </ContentWrapper>
   );
 }

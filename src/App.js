@@ -65,6 +65,9 @@ const Reflection = styled.div`
 function App() {
   const [currentPage, setCurrentPage] = useState("c") 
 
+  
+
+
   return <Main>
     <Bar>
       <div className="image" onClick={() => setCurrentPage("front")}></div>
