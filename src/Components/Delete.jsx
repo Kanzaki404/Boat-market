@@ -60,6 +60,9 @@ const Content = styled.div`
     /* background: #888;  */
     background: #3c3c3c;
   }
+  button:hover{
+      text-decoration: underline;
+    }
 `;
 
 const DelButton = styled.button`
@@ -71,9 +74,12 @@ const DelButton = styled.button`
     color: white;
     font-size: 15px;
     outline: none;
+    
 `
 const TableRow = styled.tr`
-
+  #buttonSection{
+    text-align: center;
+  }
 `
 
 const baseUrl = "http://localhost:5000/";
@@ -86,6 +92,17 @@ function GetAllBoats(setBoats, baseUrl) {
   })
   .catch((err) => console.log('ERROR ---> ' + err));
 }
+
+function removeBoat(id , setBoats){
+  
+  axios.delete(`${baseUrl}delete`,  {params: {id: id}})
+  .then((res) =>{  
+    GetAllBoats(setBoats, baseUrl)
+   console.log(res.data)
+  })
+  .catch((err) => console.log('ERROR ---> ' + err));
+}
+
 
 export default function Delete() {
   const [boats, setBoats] = useState([]);
@@ -100,17 +117,17 @@ export default function Delete() {
 
 const BoatsList = boats.map((e) => (
 
-  <TableRow key={e.name}> 
-    <td>{e.name}</td>
+  <TableRow key={e._id}> 
+    <td>{e.modellname}</td>
     <td>{e.price} SEK</td>
     
-    {e.Sail !== 'yes' ? 
+    {e.sail !== 'yes' ? 
       <td>Type: Motorized</td>
       :
       <td>Type: Sail</td>
     }
-    <td>{e.manifactured_year}</td>
-    <td><DelButton>Delete</DelButton></td>
+    <td>{e.manifacturedYear}</td>
+    <td id='buttonSection'><DelButton onClick={() => removeBoat(e._id, setBoats)}>Delete</DelButton></td>
   </TableRow>
 ));
   return (
@@ -119,6 +136,13 @@ const BoatsList = boats.map((e) => (
       <Content>
         <table>
         <tbody>
+        <tr>
+          <th>Model Name</th>
+          <th>Price</th>
+          <th>Type</th>
+          <th>Manifactured Year</th>
+        </tr>
+  
           {BoatsList}
           </tbody>
         </table>

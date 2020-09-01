@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
-
+import axios from "axios";
 const FilterWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -110,8 +110,42 @@ const InputFieldStyle = styled.input`
     border: 1px solid rgba(81, 203, 238, 1);
   }
 `;
+const baseUrl = "http://localhost:5000/";
+function sendBoatToServer(payload){
+  axios.post(`${baseUrl}addBoat`, {params: payload})
+  .then(res => console.log(res.data))
+  .catch(err => console.log('Of course it dosent work' + err))
+}
+
 
 function Add() {
+  const [modelName, setModelName] = useState("");
+  const [price, setPrice] = useState("");
+  const [manifacturedDate, setManifacturedDate] = useState("");
+  const [typeOfBoat, setTypeOfBoat] = useState("");
+  const boatToBeAdded = {
+    modellname: "",
+    price: 0,
+    manifacturedYear: "",
+    motorized: "",
+    sail: ""
+  }
+  function sendData(){
+   
+    boatToBeAdded.modellname = modelName;
+    boatToBeAdded.price = price;
+    boatToBeAdded.manifacturedYear = manifacturedDate;
+    if(typeOfBoat === "sail"){
+      boatToBeAdded.motorized = "no"
+      boatToBeAdded.sail = "yes"
+    }else{
+      boatToBeAdded.motorized = "yes"
+      boatToBeAdded.sail = "no"
+    }
+     
+    console.log(boatToBeAdded)
+    sendBoatToServer(boatToBeAdded);
+  };
   return (
     <FilterWrapper>
         <h2>Upload new ship</h2>
@@ -122,11 +156,19 @@ function Add() {
             id="ModelName"
             type="text"
             placeholder="Model Name..."
+            value={modelName}
+            onChange={(e) => setModelName(e.target.value)}
           />
         </div>
         <div className="priceField">
           <label htmlFor="Price">Price</label>
-          <InputFieldStyle id="Price" type="text" placeholder="Price..." />
+          <InputFieldStyle 
+            id="Price" 
+            type="text" 
+            placeholder="Price..." 
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            />
         </div>
       </div>
       <div className="Two">
@@ -136,23 +178,25 @@ function Add() {
             id="Manifacturedyear"
             type="text"
             placeholder="Year..."
+            value={manifacturedDate}
+            onChange={(e) => setManifacturedDate(e.target.value)}
           />
         </div>
         <div className="typeOfBoat">
           <label id="TypeLabel" htmlFor="Type">
             Type
           </label>
-          <div id="Type">
-            <input type="radio" id="Sail" name="choice"></input>
+          <div id="Type" onChange={(e) => setTypeOfBoat(e.target.value)}>
+            <input type="radio" id="Sail" name="choice" value="sail"></input>
             <label htmlFor="Sail">Sail</label>
             <br />
-            <input type="radio" id="Motor" name="choice"></input>
+            <input type="radio" id="Motor" name="choice" value="motorized"></input>
             <label htmlFor="Motor">Motorized</label>
           </div>
         </div>
       </div>
       <div className="Three">
-            <button id="upBtn" type="button">Upload</button>
+            <button id="upBtn" type="button" onClick={() => sendData()}>Upload</button>
       </div>
     </FilterWrapper>
   );

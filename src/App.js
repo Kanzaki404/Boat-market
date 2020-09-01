@@ -44,9 +44,12 @@ const Bar = styled.div`
     color: white;
     margin-top: 8px;
     text-decoration-line: underline;
-  text-decoration-style: wavy;
+    text-decoration-style: wavy;
     margin-right: 25px;
     cursor:pointer;
+    
+    
+    
   }
 
   
@@ -59,6 +62,7 @@ const Reflection = styled.div`
     height: 50px;
     width: 180px;
     transform: rotateX(-180deg);   
+    opacity: 0.6;
 `
 
 

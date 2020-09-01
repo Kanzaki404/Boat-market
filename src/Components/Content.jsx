@@ -52,10 +52,8 @@ const One = styled.div`
 
 const Two = styled.div`
   height: 100%;
-
   width: 65%;
   text-align: right;
-
   box-sizing: border-box;
   .info {
     margin-right: 10px;
@@ -86,23 +84,24 @@ export default function Content() {
 }, []);
 
 console.log(Array.isArray(boats))
+console.log(boats)
 const BoatsList = boats.map((e) => (
 
-   <Card key={e.name}> 
+   <Card key={e._id}> 
         <One>
           <div className="img1"></div>
         </One>
         <Two>
           <div className="info">
-            <h2>{e.name}</h2>
+            <h2>{e.modellname}</h2>
             <h2>{e.price} SEK</h2>
-            {e.Sail !== 'yes' ? 
+            {e.sail !== 'yes' ? 
              <h4>Type: Motorized</h4>
             :
             <h4>Type: Sail</h4>
           }
            
-            <h4>Manifactured: July 1, {e.manifactured_year}</h4>
+            <h4>Manifactured: July 1, {e.manifacturedYear}</h4>
           </div>
         </Two>
       </Card>

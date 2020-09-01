@@ -3,6 +3,11 @@ const app = express();
 const port = 5000;
 const bodyParser = require("body-parser");
 const path = require("path");
+const {getAllBoats, deleteBoat, addBoat} = require('./database.js');
+
+
+
+
 // Middleware
 app.use(express.static(__dirname + "/../build"));
 app.use((req, res, next) => {
@@ -15,28 +20,36 @@ app.use(bodyParser.json());
 
 // Routes
 
-app.get("/a", (req, res) => {
-  res.send("ok");
-});
-const boats = [
-  {
-    name: "Bismark MK2",
-    price: 200000,
-    Motorized: "yes",
-    Sail: "no",
-    manifactured_year: 1936,
-  },
-  {
-    name: "Bismark MK3",
-    price: 300000,
-    Motorized: "no",
-    Sail: "yes",
-    manifactured_year: 1946,
-  }
-];
+
+
 app.get("/boats", (req, res) => {
-    console.log(typeof boats)
-  res.send(boats);
+    
+    getAllBoats(dataOrError => {
+		res.send(dataOrError)
+	});
 });
+
+app.delete("/delete", (req, res) => {
+    console.log('test',req.query.id)
+    deleteBoat(req.query.id, dataOrError => {
+    res.send(dataOrError)
+  });
+});
+
+app.post('/addBoat', (req, res) => {
+  console.log(req.body.params)
+	addBoat(req.body.params, dataOrError => {
+		res.send(dataOrError)
+	})
+})
+
+
+
+
+
+
+
+
+
 
 app.listen(port, () => console.log("Server is listening on port " + port));
