@@ -91,6 +91,13 @@ const FilterWrapper = styled.div`
     margin-top: 7px;
 	outline: none;
     }
+    .preview{
+      img{
+        height: 100px;
+      width: 150px;
+      }
+    
+    }
   }
 `;
 
@@ -111,11 +118,15 @@ const InputFieldStyle = styled.input`
   }
 `;
 const baseUrl = "http://localhost:5000/";
-function sendBoatToServer(payload){
+function sendBoatToServer(payload,clearInput){
   axios.post(`${baseUrl}addBoat`, {params: payload})
-  .then(res => console.log(res.data))
+  .then(res => {
+    console.log(res.data)
+    clearInput()
+  })
   .catch(err => console.log('Of course it dosent work' + err))
 }
+
 
 
 function Add() {
@@ -123,6 +134,29 @@ function Add() {
   const [price, setPrice] = useState("");
   const [manifacturedDate, setManifacturedDate] = useState("");
   const [typeOfBoat, setTypeOfBoat] = useState("");
+ 
+  function clearInput(){
+    setModelName("")
+    setPrice("")
+    setManifacturedDate("")
+    setTypeOfBoat("")
+
+  }
+  //TESTING--------------------------------TESTING
+  const [picture, setPicture] = useState(null);
+  const [imgData, setImgData] = useState(null);
+  const onChangePicture = e => {
+    if (e.target.files[0]) {
+      console.log("picture: ", e.target.files);
+      setPicture(e.target.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImgData(reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+   //TESTING--------------------------------TESTING
   const boatToBeAdded = {
     modellname: "",
     price: 0,
@@ -131,10 +165,10 @@ function Add() {
     sail: ""
   }
   function sendData(){
-   
-    boatToBeAdded.modellname = modelName;
-    boatToBeAdded.price = price;
-    boatToBeAdded.manifacturedYear = manifacturedDate;
+    if(modelName !== "" && price!=="" && manifacturedDate!==""&& typeOfBoat!==""){
+      boatToBeAdded.modellname = modelName;
+    boatToBeAdded.price = parseInt(price);
+    boatToBeAdded.manifacturedYear = parseInt(manifacturedDate);
     if(typeOfBoat === "sail"){
       boatToBeAdded.motorized = "no"
       boatToBeAdded.sail = "yes"
@@ -144,7 +178,11 @@ function Add() {
     }
      
     console.log(boatToBeAdded)
-    sendBoatToServer(boatToBeAdded);
+    sendBoatToServer(boatToBeAdded,clearInput);
+    }else{
+      return;
+    }
+    
   };
   return (
     <FilterWrapper>
@@ -196,7 +234,17 @@ function Add() {
         </div>
       </div>
       <div className="Three">
-            <button id="upBtn" type="button" onClick={() => sendData()}>Upload</button>
+        
+            <button 
+              id="upBtn"
+              type="button"
+              onClick={() => sendData()}
+             >Upload</button>
+             <input type="file" onChange={onChangePicture}/>
+            <div className="preview"> 
+            <img src={imgData} alt="hmm"/>
+            </div>
+            
       </div>
     </FilterWrapper>
   );

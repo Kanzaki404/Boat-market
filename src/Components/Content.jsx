@@ -16,7 +16,7 @@ const ContentWrapper = styled.div`
   }
   /* Track */
   ::-webkit-scrollbar-track {
-    background: rgb(160 160 160);
+    background: rgb(160, 160, 160);
   }
 
   /* Handle */
@@ -76,7 +76,7 @@ function GetAllBoats(setBoats) {
 
 export default function Content({arr}) {
   const [boats, setBoats] = useState([]);
-  const [exist, setExist] = useState(true)
+ 
 
   useEffect(() => {
   GetAllBoats(setBoats);

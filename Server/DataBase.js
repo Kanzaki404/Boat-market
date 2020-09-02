@@ -81,10 +81,32 @@ function search(query, callback) {
 	if( query.modellname) {
 		filter.modellname = { "$regex":query.modellname, $options: '-i'};
 	}
-	// if( query.color ) {
-	// 	filter.color = query.color;
+	// if( query.order) {
+	// 	filter.order = { $query: {}, $orderby: { price : 1 } }
 	// }
-	
+	if( query.maxprice) {
+		filter.price = {$lt: query.maxprice };
+	}
+	if(query.motorized === 'yes'){
+		filter.motorized = { $eq: query.motorized }
+	}
+	if(query.sail === 'yes'){
+		filter.sail = { $eq: query.sail }
+	}
+	if(query.madeafter){
+		
+		filter.manifacturedYear  = { $gt: Number(query.madeafter) }
+	}
+	if(query.madebefore){
+		filter.manifacturedYear  = { $lt: Number(query.madebefore) }
+	}
+	console.log('what is querrryyyyyyyyy',query) //we gettin or not?
+	// if( query.order) {
+	// 	if(query.order ==="lowToHigh"){
+	// 		filter.order = {$sort: { price: -1}};
+	// 	}
+		
+	// }
 
 	MongoClient.connect(
 		url,

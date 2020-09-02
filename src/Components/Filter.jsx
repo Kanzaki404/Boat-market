@@ -162,13 +162,14 @@ const RemoveFilterBtn = styled.button`
 `;
 const baseUrl = "http://localhost:5000/";
 
-function sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback){
+function sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback,clearInputs){
   
   axios.get(`${baseUrl}search`,  {params: serachFilterToBeSent})
   .then((res) =>{  
     setFilterRes(res.data)
     console.log('what is going on', res.data)
     dataCallback(res.data)
+    clearInputs()
   })
   .catch((err) => console.log('ERROR ---> ' + err));
 }
@@ -176,44 +177,62 @@ function sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback){
 export default function Filter({dataCallback}) {
   const [filterRes , setFilterRes] = useState([])
   const [modelname, setModelname] = useState("");
-  // const [maxPrice, setMaxPrice] = useState("");
-  // const [madeBefore, setMadeBefore] = useState("");
-  // const [madeAfter, setMadeAfter] = useState("");
-  // const [year, setYear] = useState("");
-  // const [motorized, setMotorized] = useState("");
-  // const [sail, setSail] = useState("");
-  // const [order, setOrder] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [oldNew, setOldNew] = useState("")
+  const [year, setYear] = useState("");
+  const [order, setOrder] = useState("lowToHigh");
+  const [typeOfBoat, setTypeOfBoat] = useState("");
+  function clearInputs(){
+    setModelname("")
+    setMaxPrice("")
+    setTypeOfBoat("")
+    setYear("")
+    setOldNew("")
+   }
   const serachFilterToBeSent = {
     modellname: "",
-    // maxprice: 0,
-    // madeafter: "",
-    // madebefore: "",
-    // year: "",
-    // motorized: "",
-    // sail: "",
-    // order: ""
+    maxprice: 0,
+    madeafter: null,
+    madebefore: null,
+    motorized: "",
+    sail: "",
+    order: ""
   }
-
+ 
   function sendFilter(){
     
     serachFilterToBeSent.modellname = modelname;
-    // serachFilterToBeSent.maxprice = maxPrice;
-    // erachFilterToBeSent.madeafter = madeAfter;
-    // erachFilterToBeSent.madebefore = madeBefore;
-    // erachFilterToBeSent.madebefore = madeBefore;
-    // serachFilterToBeSent.manifacturedYear = manifacturedDate;
-    // if(typeOfBoat === "sail"){
-    //   serachFilterToBeSent.motorized = "no"
-    //   serachFilterToBeSent.sail = "yes"
-    // }else{
-    //   serachFilterToBeSent.motorized = "yes"
-    //   serachFilterToBeSent.sail = "no"
+    serachFilterToBeSent.maxprice = maxPrice;
+    serachFilterToBeSent.order = order;
+   
     
-    sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback);
-    console.log(filterRes)
-    setModelname("")
+    // serachFilterToBeSent.manifacturedYear = manifacturedDate;
+    if(year !== ""){
+      
+      if(oldNew === 'after'){
+        serachFilterToBeSent.madeafter = parseInt(year);
+      }else{
+        serachFilterToBeSent.madebefore = parseInt(year);
+      }
+    }else{
+      if(typeOfBoat === "sail"){
+        console.log('In front type of boat', typeOfBoat)
+        serachFilterToBeSent.motorized = "no"
+        serachFilterToBeSent.sail = "yes"
+      }else if(typeOfBoat === "motorized"){
+        console.log('In front type of boat2', typeOfBoat)
+        serachFilterToBeSent.motorized = "yes"
+        serachFilterToBeSent.sail = "no"
+      }
     }
-     
+    
+    
+    sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback,clearInputs);
+    console.log(filterRes)
+    
+    
+    }
+    
    
   
   return (
@@ -228,33 +247,40 @@ export default function Filter({dataCallback}) {
       <InputField2>
         <MaxPrice>
           <MaxPriceLabel htmlFor="maxPrice"> Max Price: </MaxPriceLabel>
-          <MaxPriceInput id="maxPrice" placeholder="Max Price"></MaxPriceInput>
+          <MaxPriceInput 
+          id="maxPrice" 
+          placeholder="Max Price"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(e.target.value)}  
+          ></MaxPriceInput>
         </MaxPrice>
-        <Type>
+        <Type  onChange={(e) =>setTypeOfBoat(e.target.value)}>
           <TypeLabel htmlFor="motorType">Motorised:</TypeLabel>
-          <TypeInput id="motorType" type="checkbox"></TypeInput>
+          <TypeInput id="motorType" type="radio" name="typeChoice" value="motorized" ></TypeInput>
           <TypeLabel htmlFor="sailType">Sail:</TypeLabel>
-          <TypeInput id="sailType" type="checkbox"></TypeInput>
+          <TypeInput id="sailType" type="radio"  name="typeChoice" value="sail"></TypeInput>
         </Type>
       </InputField2>
       <InputField3>
         <ManifacturedYear>
-          <div>
-            <input type="radio" id="madeBehtmlFore" name="choice"></input>
+          <div onChange={(e) =>setOldNew(e.target.value)}>
+            <input type="radio" id="madeBehtmlFore" name="choice" value="before"></input>
             <label htmlFor="madeBehtmlFore">Made Before</label>
             <br />
-            <input type="radio" id="madeAfter" name="choice"></input>
+            <input type="radio" id="madeAfter" name="choice" value="after"></input>
             <label htmlFor="madeAfter">Made After</label>
           </div>
 
           <ManifacturedYearInput
             type="text"
             placeholder="Year..."
+            value={year}
+            onChange={(e) => setYear(e.target.value)} 
           ></ManifacturedYearInput>
         </ManifacturedYear>
         <OrderBy>
 			<label htmlFor="orderby">Order by:</label>
-			<Select name="cars" id="orderby">
+			<Select name="cars" id="orderby" onChange={(e) => setOrder(e.target.value)}>
 				<option value="lowToHigh">Low - High (price)</option>
 				<option value="highToLow">High - Low (price)</option>
 				<option value="alpha">Alphabetical order</option>

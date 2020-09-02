@@ -142,8 +142,10 @@ const BoatsList = boats.map((e) => (
           <th>Type</th>
           <th>Manifactured Year</th>
         </tr>
-  
-          {BoatsList}
+        
+        {BoatsList}
+        
+          
           </tbody>
         </table>
       </Content>
