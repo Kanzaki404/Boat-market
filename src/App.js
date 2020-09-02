@@ -68,8 +68,14 @@ const Reflection = styled.div`
 
 function App() {
   const [currentPage, setCurrentPage] = useState("c") 
-
-  
+  const [boats, setBoats] = useState([]);
+  function dataCallback(e){
+   
+      setBoats(e)
+    
+    
+    console.log('in App', e)
+  }
 
 
   return <Main>
@@ -82,8 +88,8 @@ function App() {
     <Reflection></Reflection>
     {currentPage==='front' ? 
     <div>
-    <Filter></Filter>
-    <Content></Content>
+    <Filter dataCallback = {h=>dataCallback(h)}></Filter>
+    <Content arr={boats}></Content>
     </div>
     :
     <div>

@@ -3,7 +3,7 @@ const app = express();
 const port = 5000;
 const bodyParser = require("body-parser");
 const path = require("path");
-const {getAllBoats, deleteBoat, addBoat} = require('./database.js');
+const {getAllBoats, deleteBoat, addBoat, search} = require('./database.js');
 
 
 
@@ -43,6 +43,13 @@ app.post('/addBoat', (req, res) => {
 	})
 })
 
+
+app.get('/search', (req, res) => {
+	
+	search(req.query, dataOrError => {
+		res.send(dataOrError)
+	})
+})
 
 
 

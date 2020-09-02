@@ -65,23 +65,37 @@ const Two = styled.div`
 const baseUrl = "http://localhost:5000/";
 
 
-function GetAllBoats(setBoats, baseUrl) {
+function GetAllBoats(setBoats) {
   axios.get(`${baseUrl}boats`)
   .then((res) =>{  
    setBoats(res.data)
+   console.log('if no res?', res.data)
   })
   .catch((err) => console.log('ERROR ---> ' + err));
 }
 
-export default function Content() {
+export default function Content({arr}) {
   const [boats, setBoats] = useState([]);
-  
+  const [exist, setExist] = useState(true)
 
   useEffect(() => {
-  GetAllBoats(setBoats, baseUrl);
+  GetAllBoats(setBoats);
   
   // eslint-disable-next-line
 }, []);
+
+useEffect(() => {
+  if(arr !== 'remove'){
+    setBoats(arr)
+
+  }else{
+    GetAllBoats(setBoats)
+
+  }
+  
+  // eslint-disable-next-line
+}, [arr]);
+
 
 console.log(Array.isArray(boats))
 console.log(boats)
@@ -108,7 +122,23 @@ const BoatsList = boats.map((e) => (
 ));
   return (
     <ContentWrapper>
+      
+      
+      <div>
       {BoatsList}
+      </div>
+      {arr.length<1 && boats.length <1?
+      
+      <h2>No matches Found</h2>
+      :
+      <div></div>
+      
+      
+      }
+     
+      
+      
+      
     </ContentWrapper>
   );
 }

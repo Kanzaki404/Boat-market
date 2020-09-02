@@ -9,6 +9,7 @@ function getAllBoats(callback) {
 	get({}, callback)
 }
 
+
 function deleteBoat(_id,callback){
 	del(_id, callback)
 }
@@ -75,6 +76,43 @@ function del(id, callback){
 	)
 }
 
+function search(query, callback) {
+	const filter = {};
+	if( query.modellname) {
+		filter.modellname = { "$regex":query.modellname, $options: '-i'};
+	}
+	// if( query.color ) {
+	// 	filter.color = query.color;
+	// }
+	
+
+	MongoClient.connect(
+		url,
+		{ useUnifiedTopology: true },
+		async (error, client) => {
+			if( error ) {
+				callback('"ERROR!! Could not connect"');
+				return;  // exit the callback function
+			}
+			const col = client.db(dbName).collection(collectionName);
+			try {
+				console.log('what is the filter', filter)
+				const cursor = await col.find(filter);
+				const array = await cursor.toArray();
+				console.log('array',array)
+				callback(array);
+
+			} catch(error) {
+				console.log('Query error: ' + error.message);
+				callback('"ERROR!! Query error"');
+
+			} finally {
+				client.close();
+			}
+		}// connect callback - async
+	)//connect - async
+}
+
 function addShip(reqestsBody, callback) {
 	const doc = reqestsBody;
 	MongoClient.connect(
@@ -106,5 +144,5 @@ function addShip(reqestsBody, callback) {
 
 
 module.exports = {
-	getAllBoats, deleteBoat,addBoat
+	getAllBoats, deleteBoat,addBoat,search
 }

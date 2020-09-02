@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
-
+import axios from "axios";
 const FilterWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -147,11 +147,83 @@ const SerachButton = styled.button`
     margin-top: 7px;
 	outline: none;
 `;
-export default function Filter() {
+const RemoveFilterBtn = styled.button`
+  	height: 35px;
+    width: 190px;
+    border: none;
+    background: #dc3545;;
+    border-radius: 3px;
+    color: white;
+    font-size: 15px;
+    font-weight: 400;
+    float: right;
+    margin-top: 7px;
+	outline: none;
+`;
+const baseUrl = "http://localhost:5000/";
+
+function sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback){
+  
+  axios.get(`${baseUrl}search`,  {params: serachFilterToBeSent})
+  .then((res) =>{  
+    setFilterRes(res.data)
+    console.log('what is going on', res.data)
+    dataCallback(res.data)
+  })
+  .catch((err) => console.log('ERROR ---> ' + err));
+}
+
+export default function Filter({dataCallback}) {
+  const [filterRes , setFilterRes] = useState([])
+  const [modelname, setModelname] = useState("");
+  // const [maxPrice, setMaxPrice] = useState("");
+  // const [madeBefore, setMadeBefore] = useState("");
+  // const [madeAfter, setMadeAfter] = useState("");
+  // const [year, setYear] = useState("");
+  // const [motorized, setMotorized] = useState("");
+  // const [sail, setSail] = useState("");
+  // const [order, setOrder] = useState("");
+  const serachFilterToBeSent = {
+    modellname: "",
+    // maxprice: 0,
+    // madeafter: "",
+    // madebefore: "",
+    // year: "",
+    // motorized: "",
+    // sail: "",
+    // order: ""
+  }
+
+  function sendFilter(){
+    
+    serachFilterToBeSent.modellname = modelname;
+    // serachFilterToBeSent.maxprice = maxPrice;
+    // erachFilterToBeSent.madeafter = madeAfter;
+    // erachFilterToBeSent.madebefore = madeBefore;
+    // erachFilterToBeSent.madebefore = madeBefore;
+    // serachFilterToBeSent.manifacturedYear = manifacturedDate;
+    // if(typeOfBoat === "sail"){
+    //   serachFilterToBeSent.motorized = "no"
+    //   serachFilterToBeSent.sail = "yes"
+    // }else{
+    //   serachFilterToBeSent.motorized = "yes"
+    //   serachFilterToBeSent.sail = "no"
+    
+    sendFilterToServer(serachFilterToBeSent,setFilterRes,dataCallback);
+    console.log(filterRes)
+    setModelname("")
+    }
+     
+   
+  
   return (
     <FilterWrapper>
       <InputField>
-        <InputArea placeholder="Search Model Name..."></InputArea>
+        <InputArea 
+          placeholder="Search Model Name..."
+          value={modelname}
+          onChange={(e) => setModelname(e.target.value)}        
+        ></InputArea>
       </InputField>
       <InputField2>
         <MaxPrice>
@@ -194,7 +266,8 @@ export default function Filter() {
 		</OrderBy>
       </InputField3>
       <InputField4>
-	  		<SerachButton>Serach</SerachButton>
+	  		<SerachButton onClick={() => sendFilter()}>Serach</SerachButton>
+        <RemoveFilterBtn onClick={()=> dataCallback('remove')}>Remove Filter</RemoveFilterBtn>
 	  </InputField4>
     </FilterWrapper>
   );
