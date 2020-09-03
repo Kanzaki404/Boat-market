@@ -77,6 +77,7 @@ function del(id, callback){
 }
 
 function search(query, callback) {
+	console.log(query)
 	const filter = {};
 	if( query.modellname) {
 		filter.modellname = { "$regex":query.modellname, $options: '-i'};
@@ -100,13 +101,7 @@ function search(query, callback) {
 	if(query.madebefore){
 		filter.manifacturedYear  = { $lt: Number(query.madebefore) }
 	}
-	console.log('what is querrryyyyyyyyy',query) //we gettin or not?
-	// if( query.order) {
-	// 	if(query.order ==="lowToHigh"){
-	// 		filter.order = {$sort: { price: -1}};
-	// 	}
-		
-	// }
+	
 
 	MongoClient.connect(
 		url,

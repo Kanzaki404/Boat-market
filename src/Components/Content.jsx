@@ -47,7 +47,12 @@ const One = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 3px 0px 0px 3px;
+    
   }
+  img{
+    height: 100%;
+        width: 245px;
+    }
 `;
 
 const Two = styled.div`
@@ -103,7 +108,13 @@ const BoatsList = boats.map((e) => (
 
    <Card key={e._id}> 
         <One>
+          {e.photo ? 
+          
+          <img src={e.photo} alt=""/>
+          :
           <div className="img1"></div>
+        }
+          
         </One>
         <Two>
           <div className="info">

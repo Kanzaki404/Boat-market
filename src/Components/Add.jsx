@@ -5,7 +5,7 @@ const FilterWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   width: 800px;
-  height: 320px;
+  height: 460px;
   margin-top: 50px;
   margin-left: auto;
   margin-right: auto;
@@ -92,13 +92,23 @@ const FilterWrapper = styled.div`
 	outline: none;
     }
     .preview{
+      float:left;
       img{
         height: 100px;
       width: 150px;
       }
     
     }
+    
   }
+  .imageUrlArea{
+     
+      text-align: initial;
+      margin-bottom: 25px;
+      #urlInput{
+        width:100%;
+      }
+    }
 `;
 
 const InputFieldStyle = styled.input`
@@ -134,35 +144,37 @@ function Add() {
   const [price, setPrice] = useState("");
   const [manifacturedDate, setManifacturedDate] = useState("");
   const [typeOfBoat, setTypeOfBoat] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
  
   function clearInput(){
     setModelName("")
     setPrice("")
     setManifacturedDate("")
     setTypeOfBoat("")
+    setImageUrl("")
 
   }
   //TESTING--------------------------------TESTING
-  const [picture, setPicture] = useState(null);
-  const [imgData, setImgData] = useState(null);
-  const onChangePicture = e => {
-    if (e.target.files[0]) {
-      console.log("picture: ", e.target.files);
-      setPicture(e.target.files[0]);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImgData(reader.result);
-      });
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+  
+  // const onChangePicture = e => {
+  //   if (e.target.files[0]) {
+  //     console.log("picture: ", e.target.files);
+  //     setPicture(e.target.files[0]);
+  //     const reader = new FileReader();
+  //     reader.addEventListener("load", () => {
+  //       setImgData(reader.result);
+  //     });
+  //     reader.readAsDataURL(e.target.files[0]);
+  //   }
+  // };
    //TESTING--------------------------------TESTING
   const boatToBeAdded = {
     modellname: "",
     price: 0,
     manifacturedYear: "",
     motorized: "",
-    sail: ""
+    sail: "",
+    photo:""
   }
   function sendData(){
     if(modelName !== "" && price!=="" && manifacturedDate!==""&& typeOfBoat!==""){
@@ -176,7 +188,7 @@ function Add() {
       boatToBeAdded.motorized = "yes"
       boatToBeAdded.sail = "no"
     }
-     
+    boatToBeAdded.photo = imageUrl
     console.log(boatToBeAdded)
     sendBoatToServer(boatToBeAdded,clearInput);
     }else{
@@ -233,16 +245,28 @@ function Add() {
           </div>
         </div>
       </div>
+      <div className="imageUrlArea">
+      <InputFieldStyle
+              id="urlInput"
+             type="text"
+             value={imageUrl} 
+             onChange={(e)=> setImageUrl(e.target.value)}
+             placeholder="Image Url"
+             >
+             </InputFieldStyle>
+      </div>
+      
       <div className="Three">
-        
+      
             <button 
               id="upBtn"
               type="button"
               onClick={() => sendData()}
              >Upload</button>
-             <input type="file" onChange={onChangePicture}/>
+            
             <div className="preview"> 
-            <img src={imgData} alt="hmm"/>
+            <img src={imageUrl} alt="No image linked"/>
+            
             </div>
             
       </div>
