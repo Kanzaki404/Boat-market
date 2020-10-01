@@ -30,14 +30,14 @@ app.get("/boats", (req, res) => {
 	});
 });
 
-app.delete("/delete", (req, res) => {
-    console.log('test',req.query.id)
-    deleteBoat(req.query.id, dataOrError => {
+app.delete("/delete:id", (req, res) => {
+    console.log('test',req.params)
+    deleteBoat(req.params.id, dataOrError => {
     res.send(dataOrError)
   });
 });
 
-app.post('/addBoat', (req, res) => {
+app.post('/boat', (req, res) => {
   console.log(req.body.params)
 	addBoat(req.body.params, dataOrError => {
 		res.send(dataOrError)

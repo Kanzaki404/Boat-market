@@ -129,9 +129,8 @@ const InputFieldStyle = styled.input`
 `;
 const baseUrl = "http://localhost:5000/";
 function sendBoatToServer(payload,clearInput){
-  axios.post(`${baseUrl}addBoat`, {params: payload})
+  axios.post(`${baseUrl}boat`, {params: payload})
   .then(res => {
-    console.log(res.data)
     clearInput()
   })
   .catch(err => console.log('Of course it dosent work' + err))
@@ -154,20 +153,7 @@ function Add() {
     setImageUrl("")
 
   }
-  //TESTING--------------------------------TESTING
   
-  // const onChangePicture = e => {
-  //   if (e.target.files[0]) {
-  //     console.log("picture: ", e.target.files);
-  //     setPicture(e.target.files[0]);
-  //     const reader = new FileReader();
-  //     reader.addEventListener("load", () => {
-  //       setImgData(reader.result);
-  //     });
-  //     reader.readAsDataURL(e.target.files[0]);
-  //   }
-  // };
-   //TESTING--------------------------------TESTING
   const boatToBeAdded = {
     modellname: "",
     price: 0,
@@ -189,7 +175,6 @@ function Add() {
       boatToBeAdded.sail = "no"
     }
     boatToBeAdded.photo = imageUrl
-    console.log(boatToBeAdded)
     sendBoatToServer(boatToBeAdded,clearInput);
     }else{
       return;
@@ -265,7 +250,7 @@ function Add() {
              >Upload</button>
             
             <div className="preview"> 
-            <img src={imageUrl} alt="No image linked"/>
+            <img src={imageUrl} alt="No shashin linked"/>
             
             </div>
             

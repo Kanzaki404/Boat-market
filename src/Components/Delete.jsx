@@ -95,10 +95,9 @@ function GetAllBoats(setBoats, baseUrl) {
 
 function removeBoat(id , setBoats){
   
-  axios.delete(`${baseUrl}delete`,  {params: {id: id}})
+  axios.delete(`${baseUrl}delete${id}`)
   .then((res) =>{  
     GetAllBoats(setBoats, baseUrl)
-   console.log(res.data)
   })
   .catch((err) => console.log('ERROR ---> ' + err));
 }

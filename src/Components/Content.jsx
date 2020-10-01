@@ -47,12 +47,11 @@ const One = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 3px 0px 0px 3px;
-    
   }
-  img{
+  img {
     height: 100%;
-        width: 245px;
-    }
+    width: 245px;
+  }
 `;
 
 const Two = styled.div`
@@ -69,87 +68,58 @@ const Two = styled.div`
 `;
 const baseUrl = "http://localhost:5000/";
 
-
 function GetAllBoats(setBoats) {
-  axios.get(`${baseUrl}boats`)
-  .then((res) =>{  
-   setBoats(res.data)
-   console.log('if no res?', res.data)
-  })
-  .catch((err) => console.log('ERROR ---> ' + err));
+  axios
+    .get(`${baseUrl}boats`)
+    .then((res) => {
+      setBoats(res.data);
+    })
+    .catch((err) => console.log("ERROR ---> " + err));
 }
 
-export default function Content({arr}) {
+export default function Content({ arr }) {
   const [boats, setBoats] = useState([]);
- 
 
   useEffect(() => {
-  GetAllBoats(setBoats);
-  
-  // eslint-disable-next-line
-}, []);
+    GetAllBoats(setBoats);
 
-useEffect(() => {
-  if(arr !== 'remove'){
-    setBoats(arr)
+    // eslint-disable-next-line
+  }, []);
 
-  }else{
-    GetAllBoats(setBoats)
+  useEffect(() => {
+    if (arr !== "remove") {
+      setBoats(arr);
+    } else {
+      GetAllBoats(setBoats);
+    }
 
-  }
-  
-  // eslint-disable-next-line
-}, [arr]);
+    // eslint-disable-next-line
+  }, [arr]);
 
+  const BoatsList = boats.map((e) => (
+    <Card key={e._id}>
+      <One>
+        {e.photo ? <img src={e.photo} alt="" /> : <div className="img1"></div>}
+      </One>
+      <Two>
+        <div className="info">
+          <h2>{e.modellname}</h2>
+          <h2>{e.price} SEK</h2>
+          {e.sail !== "yes" ? <h4>Type: Motorized</h4> : <h4>Type: Sail</h4>}
 
-console.log(Array.isArray(boats))
-console.log(boats)
-const BoatsList = boats.map((e) => (
-
-   <Card key={e._id}> 
-        <One>
-          {e.photo ? 
-          
-          <img src={e.photo} alt=""/>
-          :
-          <div className="img1"></div>
-        }
-          
-        </One>
-        <Two>
-          <div className="info">
-            <h2>{e.modellname}</h2>
-            <h2>{e.price} SEK</h2>
-            {e.sail !== 'yes' ? 
-             <h4>Type: Motorized</h4>
-            :
-            <h4>Type: Sail</h4>
-          }
-           
-            <h4>Manifactured: July 1, {e.manifacturedYear}</h4>
-          </div>
-        </Two>
-      </Card>
-));
+          <h4>Manifactured: July 1, {e.manifacturedYear}</h4>
+        </div>
+      </Two>
+    </Card>
+  ));
   return (
     <ContentWrapper>
-      
-      
-      <div>
-      {BoatsList}
-      </div>
-      {arr.length<1 && boats.length <1?
-      
-      <h2>No matches Found</h2>
-      :
-      <div></div>
-      
-      
-      }
-     
-      
-      
-      
+      <div>{BoatsList}</div>
+      {arr.length < 1 && boats.length < 1 ? (
+        <h2>No matches Found</h2>
+      ) : (
+        <div></div>
+      )}
     </ContentWrapper>
   );
 }

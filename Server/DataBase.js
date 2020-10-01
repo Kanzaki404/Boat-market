@@ -48,7 +48,7 @@ function get(filter, callback){
 
 function del(id, callback){
 	
-	
+	console.log('what form is this',id)
     MongoClient.connect(
 		url,
 		{ useUnifiedTopology: true },

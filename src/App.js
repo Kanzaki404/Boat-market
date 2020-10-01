@@ -69,12 +69,8 @@ const Reflection = styled.div`
 function App() {
   const [currentPage, setCurrentPage] = useState("c") 
   const [boats, setBoats] = useState([]);
-  function dataCallback(e){
-   
+  function dataCallback(e){   
       setBoats(e)
-    
-    
-    console.log('in App', e)
   }
 
 
