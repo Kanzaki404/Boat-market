@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 const FilterWrapper = styled.div`
@@ -15,7 +15,7 @@ const FilterWrapper = styled.div`
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  h2{
+  h2 {
     font-size: 23px;
     font-weight: 400;
   }
@@ -77,38 +77,35 @@ const FilterWrapper = styled.div`
   }
   .Three {
     height: 75px;
-    
-    #upBtn{
-        height: 35px;
-    width: 90px;
-    border: none;
-    background: #28a745;
-    border-radius: 3px;
-    color: white;
-    font-size: 15px;
-    font-weight: 400;
-    float: right;
-    margin-top: 7px;
-	outline: none;
+
+    #upBtn {
+      height: 35px;
+      width: 90px;
+      border: none;
+      background: #28a745;
+      border-radius: 3px;
+      color: white;
+      font-size: 15px;
+      font-weight: 400;
+      float: right;
+      margin-top: 7px;
+      outline: none;
     }
-    .preview{
-      float:left;
-      img{
+    .preview {
+      float: left;
+      img {
         height: 100px;
-      width: 150px;
+        width: 150px;
       }
-    
     }
-    
   }
-  .imageUrlArea{
-     
-      text-align: initial;
-      margin-bottom: 25px;
-      #urlInput{
-        width:100%;
-      }
+  .imageUrlArea {
+    text-align: initial;
+    margin-bottom: 25px;
+    #urlInput {
+      width: 100%;
     }
+  }
 `;
 
 const InputFieldStyle = styled.input`
@@ -128,62 +125,90 @@ const InputFieldStyle = styled.input`
   }
 `;
 const baseUrl = "http://localhost:5000/";
-function sendBoatToServer(payload,clearInput){
-  axios.post(`${baseUrl}boat`, {params: payload})
-  .then(res => {
-    clearInput()
-  })
-  .catch(err => console.log('Of course it dosent work' + err))
+function sendBoatToServer(payload, clearInput) {
+  axios
+    .post(`${baseUrl}boat`, { params: payload })
+    .then((res) => {
+      clearInput();
+    })
+    .catch((err) => console.log("Of course it dosent work" + err));
 }
-
-
-
+function savePhoto(formData) {
+  axios
+    .post(`${baseUrl}upload/photo`, formData, {
+      headers: {
+        "Content-type": "multipart/formData",
+      },
+    })
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((error) => console.log(error));
+}
 function Add() {
   const [modelName, setModelName] = useState("");
   const [price, setPrice] = useState("");
   const [manifacturedDate, setManifacturedDate] = useState("");
   const [typeOfBoat, setTypeOfBoat] = useState("");
-  const [imageUrl, setImageUrl] = useState('');
- 
-  function clearInput(){
-    setModelName("")
-    setPrice("")
-    setManifacturedDate("")
-    setTypeOfBoat("")
-    setImageUrl("")
-
+  //const [imageUrl, setImageUrl] = useState("");
+  const [file, setFile] = useState("");
+  const [fileName, setFileName] = useState("");
+  const [prevFile, setPrevFile] = useState("");
+  function clearInput() {
+    setModelName("");
+    setPrice("");
+    setManifacturedDate("");
+    setTypeOfBoat("");
+    //setImageUrl("");
+    setPrevFile("")
   }
-  
+
   const boatToBeAdded = {
     modellname: "",
     price: 0,
     manifacturedYear: "",
     motorized: "",
     sail: "",
-    photo:""
-  }
-  function sendData(){
-    if(modelName !== "" && price!=="" && manifacturedDate!==""&& typeOfBoat!==""){
-      boatToBeAdded.modellname = modelName;
-    boatToBeAdded.price = parseInt(price);
-    boatToBeAdded.manifacturedYear = parseInt(manifacturedDate);
-    if(typeOfBoat === "sail"){
-      boatToBeAdded.motorized = "no"
-      boatToBeAdded.sail = "yes"
-    }else{
-      boatToBeAdded.motorized = "yes"
-      boatToBeAdded.sail = "no"
+    photo: "",
+  };
+
+  const onChange = (e) => {
+    if (e.target.files.length !== 0) {
+      setFileName(e.target.files[0].name);
+      setFile(e.target.files[0]);
+      setPrevFile(URL.createObjectURL(e.target.files[0]));
     }
-    boatToBeAdded.photo = imageUrl
-    sendBoatToServer(boatToBeAdded,clearInput);
-    }else{
+  };
+
+  function sendData() {
+    const formData = new FormData();
+    formData.append("file", file);
+    if (
+      modelName !== "" &&
+      price !== "" &&
+      manifacturedDate !== "" &&
+      typeOfBoat !== ""
+    ) {
+      boatToBeAdded.modellname = modelName;
+      boatToBeAdded.price = parseInt(price);
+      boatToBeAdded.manifacturedYear = parseInt(manifacturedDate);
+      if (typeOfBoat === "sail") {
+        boatToBeAdded.motorized = "no";
+        boatToBeAdded.sail = "yes";
+      } else {
+        boatToBeAdded.motorized = "yes";
+        boatToBeAdded.sail = "no";
+      }
+      boatToBeAdded.photo = fileName;
+      sendBoatToServer(boatToBeAdded, clearInput);
+      savePhoto(formData);
+    } else {
       return;
     }
-    
-  };
+  }
   return (
     <FilterWrapper>
-        <h2>Upload new ship</h2>
+      <h2>Upload new ship</h2>
       <div className="One">
         <div className="modelField">
           <label htmlFor="ModelName">Model Name</label>
@@ -197,13 +222,13 @@ function Add() {
         </div>
         <div className="priceField">
           <label htmlFor="Price">Price</label>
-          <InputFieldStyle 
-            id="Price" 
-            type="text" 
-            placeholder="Price..." 
+          <InputFieldStyle
+            id="Price"
+            type="text"
+            placeholder="Price..."
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            />
+          />
         </div>
       </div>
       <div className="Two">
@@ -225,35 +250,37 @@ function Add() {
             <input type="radio" id="Sail" name="choice" value="sail"></input>
             <label htmlFor="Sail">Sail</label>
             <br />
-            <input type="radio" id="Motor" name="choice" value="motorized"></input>
+            <input
+              type="radio"
+              id="Motor"
+              name="choice"
+              value="motorized"
+            ></input>
             <label htmlFor="Motor">Motorized</label>
           </div>
         </div>
       </div>
       <div className="imageUrlArea">
-      <InputFieldStyle
-              id="urlInput"
-             type="text"
-             value={imageUrl} 
-             onChange={(e)=> setImageUrl(e.target.value)}
-             placeholder="Image Url"
-             >
-             </InputFieldStyle>
+        <input
+          type="file"
+          name="file"
+          id="file"
+          className="inputfile"
+          onChange={onChange}
+        />
       </div>
-      
+
       <div className="Three">
-      
-            <button 
-              id="upBtn"
-              type="button"
-              onClick={() => sendData()}
-             >Upload</button>
-            
-            <div className="preview"> 
-            <img src={imageUrl} alt="No shashin linked"/>
-            
-            </div>
-            
+        <button id="upBtn" type="button" onClick={() => sendData()}>
+          Upload
+        </button>
+
+        <div className="preview">
+          <img
+            src={prevFile ? prevFile : require("../assets/tugboat.jpg")}
+            alt="img"
+          />
+        </div>
       </div>
     </FilterWrapper>
   );

@@ -67,7 +67,7 @@ const Reflection = styled.div`
 
 
 function App() {
-  const [currentPage, setCurrentPage] = useState("c") 
+  const [currentPage, setCurrentPage] = useState("front") 
   const [boats, setBoats] = useState([]);
   function dataCallback(e){   
       setBoats(e)

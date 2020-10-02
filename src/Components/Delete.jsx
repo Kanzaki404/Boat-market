@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 
+
 const DeleteWrapper = styled.div`
   box-shadow: 1px 4px 8px 2px rgba(0, 0, 0, 0.2);
   transition: 0.3s;
@@ -105,8 +106,6 @@ function removeBoat(id , setBoats){
 
 export default function Delete() {
   const [boats, setBoats] = useState([]);
-  
-
   useEffect(() => {
   GetAllBoats(setBoats, baseUrl);
   
@@ -115,7 +114,6 @@ export default function Delete() {
 
 
 const BoatsList = boats.map((e) => (
-
   <TableRow key={e._id}> 
     <td>{e.modellname}</td>
     <td>{e.price} SEK</td>
@@ -127,6 +125,7 @@ const BoatsList = boats.map((e) => (
     }
     <td>{e.manifacturedYear}</td>
     <td id='buttonSection'><DelButton onClick={() => removeBoat(e._id, setBoats)}>Delete</DelButton></td>
+
   </TableRow>
 ));
   return (
@@ -148,6 +147,7 @@ const BoatsList = boats.map((e) => (
           </tbody>
         </table>
       </Content>
+     
     </DeleteWrapper>
   );
 }
